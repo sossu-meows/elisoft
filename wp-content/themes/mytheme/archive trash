@@ -1,0 +1,82 @@
+<?php the_post(); ?>
+    <h2>Recent Articles</h2>
+    <ol><?php wp_get_archives('type=postbypost&limit=20'); ?></ol>
+    <h2>Archives by Month:</h2>
+    <ul><?php wp_get_archives('type=monthly'); ?></ul>
+    <h2>Archives by Category:</h2>
+    <ul><?php wp_list_categories(); ?>
+    </ul>
+    <h2>Tag cloud:</h2>
+    <ul><?php wp_tag_cloud(); ?>
+    </ul>
+
+
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 tn-left">
+                <div class="row tn-slider">
+                    <!-- <div class="col-md-6">
+
+                            <div class="tn-img">
+                                <img src="img/news-450x350-1.jpg" />
+                                <div class="tn-title">
+                                    <a href="">Lorem ipsum dolor sit amet</a>
+                                </div>
+                            </div>
+                        </div> -->
+                    <?php
+                    $tam = get_the_category();
+                    $description = get_the_archive_description();
+                    //dd(wp_kses_post(wpautop($description)));
+                    //dd($description);
+                    //dd(get_tags());
+                    //dd(get_the_tag_list());
+                    //dd($tam);
+                    $args2 = array(
+                        'post_type' => 'post',
+                        'category_name' => $tam[0]->slug,
+                        //'tag' => get_the_tag_list()
+
+
+                    );
+
+                    $the_query = new WP_Query($args2);
+                    //dd($the_query);
+
+                    //dd($the_query);
+                    $output1 = '';
+                    // The Loop
+                    if ($the_query->have_posts()) {
+
+                        while ($the_query->have_posts()) {
+                            $the_query->the_post();
+                            $output1 .= '<div class="col-md-6">
+                                <div class="tn-img">';
+                            $output1 .= '' . get_the_post_thumbnail($the_query->ID, array(500, 320)) . '" />
+                                <div class="tn-title">
+                                <a href="' . get_permalink() . '">' . get_the_title() . '</a>
+                                </div>
+                                </div></div>';
+                        }
+                        echo $output1;
+                    } else {
+                        // no posts found
+                        //get_the_post_thumbnail($the_query->ID, 'thumbnail')
+                        //
+                    }
+                    ?>
+                    <!-- <div class="col-md-6">
+                            <div class="tn-img">
+                                <img src="img/news-450x350-2.jpg" />
+                                <div class="tn-title">
+                                    <a href="">Integer hendrerit elit eget purus sodales maximus</a>
+                                </div>
+                            </div>
+                        </div> -->
+                </div>
+            </div>
+            <div class="col-md-6 tn-right">
+            </div>
+        </div>
+    </div>  

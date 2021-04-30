@@ -1,0 +1,78 @@
+
+if (is_active_sidebar('sidebar-1')) {
+    dynamic_sidebar('sidebar-1');
+}
+
+
+//echo get_template_directory() . '/inc/menu-function.php';
+$location =  get_nav_menu_locations();
+dd($location);
+
+$menu = get_term($location['primary']);
+dd($menu);
+
+$menu_items = wp_get_nav_menu_items($menu->term_id);
+dd($menu_items);
+
+$menu_items = wp_get_nav_menu_items($menu->term_id);
+wp_nav_menu(
+    array(
+        'theme_location'  => 'primary', // goi menu co the thay doi trong appearance duoi phan menu structure 'theme_location'  => 'secondary',
+        'menu_class'      => 'menu-wrapper',
+        'container_class' => 'primary-menu-container',
+        'items_wrap'      => '<ul id="primary-menu-list" class="%2$s">%3$s</ul>',
+        'fallback_cb'     => false,
+    )
+);
+$location =  get_nav_menu_locations(); // lay nhung location da gan menu vao
+echo "<pre>";
+var_dump($location);
+echo "</pre>";
+$menu = get_term($location['primary']);
+
+echo "<pre>";
+var_dump($menu);
+echo "</pre>";
+// lay menu ra duoc gi
+$menu_items = wp_get_nav_menu_items($menu->term_id);
+echo "<pre>";
+var_dump($menu_items);
+echo "</pre>";
+
+?>
+<?php
+wp_nav_menu(
+    array(
+        'theme_location'  => 'primary', // goi menu co the thay doi trong appearance duoi phan menu structure 'theme_location'  => 'secondary',
+        'menu_class'      => 'menu-wrapper',
+        'container_class' => 'primary-menu-container',
+        'items_wrap'      => '',
+        'fallback_cb'     => false,
+    )
+);
+
+$location =  get_nav_menu_locations(); // lay nhung location da gan menu vao
+$menu = get_term($location['primary']);
+$menu_items = wp_get_nav_menu_items($menu->term_id);
+foreach ($menu_items as $row) {
+    if ($row->menu_item_parent ==  0) { ?>
+        <a href="<?= $row->url ?>" class="nav-item nav-link active"><?= $row->title ?></a>
+        <?php $flag = $row->ID;
+    } else {
+
+        foreach ($menu_items as $row1) {
+
+            var_dump($flag);
+            if ($row1->menu_item_parent == $flag) {
+                var_dump($row1->menu_item_parent); ?>
+                <div class="nav-item dropdown">
+                    <a href="<?= $row->url ?>" class="nav-link dropdown-toggle" data-toggle="dropdown"><?= $row->title ?></a>
+                    <div class="dropdown-menu">
+                        <a href="<?= $row1->url ?>" class="dropdown-item"><?= $row1->title ?></a>
+
+                    </div>
+                </div>
+<?php  }
+        }
+    }
+} ?>
